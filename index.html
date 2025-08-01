@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <!-- Tailwind CSS for styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts for Thai characters -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* ใช้ฟอนต์ Sarabun เป็นหลัก */
+    body, input, button, select, textarea, legend {
+      font-family: 'Sarabun', sans-serif;
+    }
+    /* ซ่อน scrollbar */
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    /* Custom animation for spinner */
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .spinner {
+      animation: spin 1s linear infinite;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+
+  <div id="app" class="min-h-screen flex flex-col items-center justify-center p-4 bg-[#FDFDDE]">
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="hidden fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50">
+      <div class="spinner h-16 w-16 border-4 border-t-4 border-t-blue-500 border-gray-200 rounded-full"></div>
+    </div>
+
+    <!-- Login View -->
+    <div id="loginView" class="w-full max-w-md">
+      <div class="bg-white rounded-xl shadow-2xl p-8">
+        <div class="text-center mb-8">
+          <h1 class="text-3xl font-bold text-gray-800"><span class="opacity-25">📚</span> ระบบแก้ไขผลการเรียน</h1>
+          <p class="text-xl text-gray-700 mt-1">0, ร และ มผ</p>
+          <p class="text-gray-600 mt-2 font-semibold">โรงเรียนแม่จันวิทยาคม</p>
+        </div>
+        <form id="loginForm">
+          <div class="mb-4">
+            <label for="id_card" class="block text-gray-700 text-sm font-bold mb-2">เลขบัตรประจำตัวประชาชน</label>
+            <input type="text" id="id_card" name="id_card" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="ตัวอย่าง: 1234567890123" required>
+          </div>
+          <div class="mb-6">
+            <label for="password" class="block text-gray-700 text-sm font-bold mb-2">รหัสผ่าน ปีเดือนวันเกิด</label>
+            <input type="password" id="password" name="password" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="ตัวอย่าง: 25000101" required>
+          </div>
+          <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-transform transform hover:scale-105 flex items-center justify-center space-x-2">
+            <span>🔑</span>
+            <span>เข้าสู่ระบบ</span>
+          </button>
+        </form>
+        <p id="loginError" class="text-red-500 text-center mt-4 font-semibold hidden"></p>
+      </div>
+    </div>
+
+    <!-- Form View -->
+    <div id="formView" class="hidden w-full max-w-4xl">
+      <div class="bg-white rounded-xl shadow-2xl p-8">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">📋 กรอกข้อมูลการแก้ไขผลการเรียน</h2>
+            <button id="logoutButton" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg text-sm flex items-center space-x-2">
+              <span>🚪</span>
+              <span>ออกจากระบบ</span>
+            </button>
+        </div>
+        
+        <form id="submissionForm" class="space-y-6">
+          <!-- Teacher Info -->
+          <fieldset class="border p-4 rounded-lg">
+            <legend class="px-2 font-semibold text-lg text-gray-700">1️⃣ ข้อมูลครูผู้สอน</legend>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+              <input type="text" name="teacherFirstName" placeholder="ชื่อ" class="p-2 border rounded-md" required>
+              <input type="text" name="teacherLastName" placeholder="นามสกุล" class="p-2 border rounded-md" required>
+              <select name="teacherDept" class="p-2 border rounded-md" required>
+                <option value="" disabled selected>เลือกกลุ่มสาระฯ</option>
+                <option value="ภาษาไทย">ภาษาไทย</option>
+                <option value="คณิตศาสตร์">คณิตศาสตร์</option>
+                <option value="วิทยาศาสตร์และเทคโนโลยี">วิทยาศาสตร์และเทคโนโลยี</option>
+                <option value="สังคมศึกษา ศาสนา และวัฒนธรรม">สังคมศึกษา ศาสนา และวัฒนธรรม</option>
+                <option value="สุขศึกษาและพลศึกษา">สุขศึกษาและพลศึกษา</option>
+                <option value="ศิลปะ">ศิลปะ</option>
+                <option value="การงานอาชีพ">การงานอาชีพ</option>
+                <option value="ภาษาต่างประเทศ">ภาษาต่างประเทศ</option>
+                <option value="อื่นๆ">อื่นๆ</option>
+              </select>
+            </div>
+          </fieldset>
+
+          <!-- Course Info -->
+          <fieldset class="border p-4 rounded-lg">
+            <legend class="px-2 font-semibold text-lg text-gray-700">2️⃣ ข้อมูลรายวิชา</legend>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+              <input type="text" name="courseId" placeholder="รหัสวิชา" class="p-2 border rounded-md" required>
+              <input type="text" name="courseName" placeholder="ชื่อรายวิชา" class="p-2 border rounded-md" required>
+            </div>
+          </fieldset>
+
+          <!-- Student Info -->
+          <fieldset class="border p-4 rounded-lg">
+            <legend class="px-2 font-semibold text-lg text-gray-700">3️⃣ ข้อมูลนักเรียน</legend>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-2">
+              <input type="text" name="studentId" placeholder="เลขประจำตัว" class="p-2 border rounded-md" required>
+              <input type="text" name="studentFirstName" placeholder="ชื่อ" class="p-2 border rounded-md" required>
+              <input type="text" name="studentLastName" placeholder="นามสกุล" class="p-2 border rounded-md" required>
+              <div class="grid grid-cols-2 gap-2">
+                <input type="text" name="studentLevel" placeholder="ระดับชั้น" class="p-2 border rounded-md" required>
+                <input type="text" name="studentRoom" placeholder="ห้อง" class="p-2 border rounded-md" required>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Grade Correction Info -->
+          <fieldset class="border p-4 rounded-lg">
+            <legend class="px-2 font-semibold text-lg text-gray-700">4️⃣ แก้ไขผลการเรียนเป็น</legend>
+            <div class="grid grid-cols-1 mt-2">
+              <input type="text" name="newGrade" placeholder="ผลการเรียนที่แก้ไข" class="p-2 border rounded-md" required>
+            </div>
+          </fieldset>
+
+          <div class="flex justify-end space-x-4 mt-6">
+            <button type="button" id="previewButton" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105 flex items-center space-x-2">
+              <span>👀</span>
+              <span>ดูตัวอย่าง</span>
+            </button>
+            <button type="button" id="submitButton" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105 flex items-center space-x-2">
+              <span>🚀</span>
+              <span>ส่งข้อมูล</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40 p-4">
+        <div class="bg-white rounded-lg shadow-xl p-8 max-w-2xl w-full max-h-full overflow-y-auto">
+            <h3 class="text-2xl font-bold mb-4 text-center">ตรวจสอบข้อมูลก่อนส่ง</h3>
+            <div id="previewContent" class="space-y-4 text-gray-800"></div>
+            <div class="flex justify-center space-x-4 mt-8">
+                <button id="editButton" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg">แก้ไข</button>
+                <button id="confirmSubmitButton" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg">ยืนยันการส่ง</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Success Modal -->
+    <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg shadow-xl p-8 max-w-sm w-full text-center">
+            <svg class="w-16 h-16 mx-auto text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <h3 id="successMessage" class="text-xl font-semibold mt-4 text-gray-800"></h3>
+            <button id="closeSuccessModalButton" class="mt-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-8 rounded-lg">ตกลง</button>
+        </div>
+    </div>
+
+    <footer class="w-full text-center text-gray-700 text-sm p-4 mt-auto">
+      ✨ Designed by Chanitsara Jinachai | Developed with Google AI | © 2025 ✨
+    </footer>
+
+  </div>
+
+  <script>
+    // **สำคัญ:** นำ Web App URL ที่ได้จากการ Deploy ใหม่ มาวางที่นี่
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw-ZAmjJHaYgaXCCR12cDc5xfUIhHS3xfoYVid6nvFNkaWPoySvoKHH5Iit_eXN-5E/exec";
+
+    // --- DOM Elements ---
+    const loginView = document.getElementById('loginView');
+    const formView = document.getElementById('formView');
+    const loginForm = document.getElementById('loginForm');
+    const submissionForm = document.getElementById('submissionForm');
+    const loginError = document.getElementById('loginError');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const logoutButton = document.getElementById('logoutButton');
+    const previewButton = document.getElementById('previewButton');
+    const submitButton = document.getElementById('submitButton');
+    const previewModal = document.getElementById('previewModal');
+    const previewContent = document.getElementById('previewContent');
+    const editButton = document.getElementById('editButton');
+    const confirmSubmitButton = document.getElementById('confirmSubmitButton');
+    const successModal = document.getElementById('successModal');
+    const successMessage = document.getElementById('successMessage');
+    const closeSuccessModalButton = document.getElementById('closeSuccessModalButton');
+
+    // --- Helper Functions ---
+    function showLoading(isLoading) {
+      if (loadingSpinner) loadingSpinner.classList.toggle('hidden', !isLoading);
+    }
+
+    function showLoginError(message) {
+      if (loginError) {
+        loginError.textContent = message;
+        loginError.classList.remove('hidden');
+      }
+    }
+
+    function switchView(viewName) {
+      if(loginView) loginView.classList.add('hidden');
+      if(formView) formView.classList.add('hidden');
+      if(loginError) loginError.classList.add('hidden');
+
+      if (viewName === 'login') {
+        if(loginView) loginView.classList.remove('hidden');
+      } else if (viewName === 'form') {
+        if(formView) formView.classList.remove('hidden');
+      }
+    }
+
+    function isFormValid() {
+        return submissionForm.checkValidity();
+    }
+
+    function populatePreview() {
+        const form = submissionForm.elements;
+        const teacherFullName = `${form.teacherFirstName.value || ''} ${form.teacherLastName.value || ''}`.trim();
+        const studentFullName = `${form.studentFirstName.value || ''} ${form.studentLastName.value || ''}`.trim();
+        const studentFullClass = `${form.studentLevel.value || ''}/${form.studentRoom.value || ''}`.trim();
+
+        previewContent.innerHTML = `
+            <p><strong>ครูผู้สอน:</strong> ${teacherFullName || '-'}</p>
+            <p><strong>กลุ่มสาระฯ:</strong> ${form.teacherDept.value || '-'}</p>
+            <hr class="my-2">
+            <p><strong>รหัสวิชา:</strong> ${form.courseId.value || '-'}</p>
+            <p><strong>ชื่อวิชา:</strong> ${form.courseName.value || '-'}</p>
+            <hr class="my-2">
+            <p><strong>เลขประจำตัว:</strong> ${form.studentId.value || '-'}</p>
+            <p><strong>นักเรียน:</strong> ${studentFullName || '-'}</p>
+            <p><strong>ชั้น:</strong> ${studentFullClass || '-'}</p>
+            <hr class="my-2">
+            <p><strong>ผลการเรียนที่แก้ไข:</strong> <span class="font-bold text-green-600">${form.newGrade.value || '-'}</span></p>
+        `;
+    }
+    
+    function handleFormSubmission() {
+        showLoading(true);
+        const form = submissionForm.elements;
+        const dataObject = {
+          teacherFirstName: form.teacherFirstName.value,
+          teacherLastName: form.teacherLastName.value,
+          teacherDept: form.teacherDept.value,
+          courseId: form.courseId.value,
+          courseName: form.courseName.value,
+          studentId: form.studentId.value,
+          studentFirstName: form.studentFirstName.value,
+          studentLastName: form.studentLastName.value,
+          studentLevel: form.studentLevel.value,
+          studentRoom: form.studentRoom.value,
+          newGrade: form.newGrade.value,
+        };
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({ action: 'submit', formData: dataObject })
+        })
+        .then(res => res.json())
+        .then(result => {
+            showLoading(false);
+            if (result.success) {
+                successMessage.textContent = result.message;
+                successModal.classList.remove('hidden');
+            } else {
+                alert("เกิดข้อผิดพลาดในการส่งข้อมูล: " + result.message);
+            }
+        })
+        .catch(error => {
+            showLoading(false);
+            alert("เกิดข้อผิดพลาดในการเชื่อมต่อ: " + error);
+        });
+    }
+
+    // --- Google Script Handlers ---
+    function onLoginSuccess(response) {
+      showLoading(false);
+      if (response.success) {
+        // Split name and pre-fill if possible
+        const teacherNameInput = document.querySelector('input[name="teacherFirstName"]');
+        const teacherLastNameInput = document.querySelector('input[name="teacherLastName"]');
+        const nameParts = response.name.split(' ');
+        teacherNameInput.value = nameParts[0] || '';
+        teacherLastNameInput.value = nameParts.slice(1).join(' ') || '';
+        
+        teacherNameInput.readOnly = true;
+        teacherLastNameInput.readOnly = true;
+        teacherNameInput.classList.add('bg-gray-200', 'cursor-not-allowed');
+        teacherLastNameInput.classList.add('bg-gray-200', 'cursor-not-allowed');
+        switchView('form');
+      } else {
+        showLoginError("เลขบัตรประชาชน หรือ รหัสผ่านไม่ถูกต้อง");
+      }
+    }
+
+    function onLoginFailure(error) {
+      showLoading(false);
+      showLoginError("เกิดข้อผิดพลาดในการเชื่อมต่อ: " + error.message);
+    }
+
+    // --- Event Listeners ---
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const id = loginForm.id_card.value.trim();
+      const password = loginForm.password.value;
+      if (!id || !password) {
+        showLoginError("กรุณากรอกข้อมูลให้ครบถ้วน");
+        return;
+      }
+      showLoading(true);
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'login', id: id, password: password })
+      })
+      .then(res => res.json())
+      .then(data => {
+        onLoginSuccess(data);
+      })
+      .catch(error => {
+        onLoginFailure(error);
+      });
+    });
+
+    logoutButton.addEventListener('click', () => {
+        const teacherNameInput = document.querySelector('input[name="teacherFirstName"]');
+        const teacherLastNameInput = document.querySelector('input[name="teacherLastName"]');
+        loginForm.reset();
+        submissionForm.reset();
+        teacherNameInput.value = '';
+        teacherLastNameInput.value = '';
+        teacherNameInput.readOnly = false;
+        teacherLastNameInput.readOnly = false;
+        teacherNameInput.classList.remove('bg-gray-200', 'cursor-not-allowed');
+        teacherLastNameInput.classList.remove('bg-gray-200', 'cursor-not-allowed');
+        switchView('login');
+    });
+
+    previewButton.addEventListener('click', () => {
+      if (isFormValid()) {
+        populatePreview();
+        previewModal.classList.remove('hidden');
+      } else {
+        alert('กรุณากรอกข้อมูลในฟอร์มให้ครบทุกช่อง');
+      }
+    });
+    
+    submitButton.addEventListener('click', () => {
+        if (isFormValid()) {
+            if(confirm('คุณต้องการส่งข้อมูลนี้เลยใช่หรือไม่?')) {
+                handleFormSubmission();
+            }
+        } else {
+            alert('กรุณากรอกข้อมูลในฟอร์มให้ครบทุกช่อง');
+        }
+    });
+
+    editButton.addEventListener('click', () => {
+      previewModal.classList.add('hidden');
+    });
+
+    confirmSubmitButton.addEventListener('click', () => {
+      previewModal.classList.add('hidden');
+      handleFormSubmission();
+    });
+    
+    closeSuccessModalButton.addEventListener('click', () => {
+        successModal.classList.add('hidden');
+        // Reset form after user acknowledges success
+        const teacherFirstName = document.querySelector('input[name="teacherFirstName"]').value;
+        const teacherLastName = document.querySelector('input[name="teacherLastName"]').value;
+        const teacherDept = document.querySelector('select[name="teacherDept"]').value;
+        submissionForm.reset();
+        document.querySelector('input[name="teacherFirstName"]').value = teacherFirstName;
+        document.querySelector('input[name="teacherLastName"]').value = teacherLastName;
+        document.querySelector('select[name="teacherDept"]').value = teacherDept;
+    });
+  </script>
+</body>
+</html>

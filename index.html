@@ -182,7 +182,7 @@
     // =========================================================================
     // 💡 นำ Web App URL ของคุณ (ที่ลงท้ายด้วย /exec) มาวางในเครื่องหมายคำพูดด้านล่างนี้
     // =========================================================================
-    const SCRIPT_URL = "https://script.google.com/u/0/home/projects/1enDMjHOwuZX6nLwZDpbrieDai0rZKJYHTYXWKi8s5_R0K_voGEH-fifu";
+    const SCRIPT_URL = "https://script.google.com/a/macros/mwk.ac.th/s/AKfycbw-ZAmjJHaYgaXCCR12cDc5xfUIhHS3xfoYVid6nvFNkaWPoySvoKHH5Iit_eXN-5E";
 
 
     // --- DOM Elements ---
@@ -206,25 +206,43 @@
 
     // --- Initialization: เช็คสถานะระบบเมื่อโหลดหน้าเว็บ ---
     window.onload = function() {
+        // แจ้งเตือนกรณีลืมนำ URL มาใส่
+        if (SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE" || SCRIPT_URL.trim() === "") {
+            showLoading(false);
+            alert("⚠️ แจ้งเตือนสำคัญ: คุณยังไม่ได้นำ Web App URL มาใส่ในไฟล์ HTML ครับ ระบบจะไม่สามารถทำงานหรือปิดปรับปรุงได้");
+            loginView.classList.remove('hidden');
+            return;
+        }
+
         showLoading(true);
         fetch(SCRIPT_URL, {
             method: 'POST',
             body: JSON.stringify({ action: 'checkStatus' })
         })
-        .then(res => res.json())
-        .then(response => {
-            showLoading(false);
-            if (response.isOpen) {
-                // ถ้าระบบเปิด ให้แสดงหน้าล็อกอิน
+        .then(res => {
+            if(!res.ok) throw new Error("การตอบสนองเครือข่ายมีปัญหา");
+            return res.text(); // อ่านค่าเป็นข้อความก่อน เพื่อดักจับ Error HTML จาก Google
+        })
+        .then(text => {
+            try {
+                const response = JSON.parse(text);
+                showLoading(false);
+                if (response.isOpen === false) {
+                    // ถ้าระบบปิด ให้แสดงหน้าปิดปรับปรุง
+                    maintenanceView.classList.remove('hidden');
+                } else {
+                    // ถ้าระบบเปิด ให้แสดงหน้าล็อกอิน
+                    loginView.classList.remove('hidden');
+                }
+            } catch (e) {
+                showLoading(false);
+                alert("⚠️ ไม่สามารถเช็คสถานะได้ (คุณอาจจะลืมอัปเดตโค้ด Code.gs เป็น New version หรือสิทธิ์เข้าถึงผิดพลาด): " + e.message);
                 loginView.classList.remove('hidden');
-            } else {
-                // ถ้าระบบปิด ให้แสดงหน้าปิดปรับปรุง
-                maintenanceView.classList.remove('hidden');
             }
         })
         .catch(error => {
-            // หากเกิดข้อผิดพลาด ให้เปิดหน้าล็อกอินเป็นค่าเริ่มต้น
             showLoading(false);
+            alert("⚠️ เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์: " + error.message);
             loginView.classList.remove('hidden'); 
         });
     };
@@ -426,4 +444,3 @@
   </script>
 </body>
 </html>
-```

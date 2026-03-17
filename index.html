@@ -206,10 +206,10 @@
 
     // --- Initialization: เช็คสถานะระบบเมื่อโหลดหน้าเว็บ ---
     window.onload = function() {
-        // แจ้งเตือนกรณีลืมนำ URL มาใส่
+        // แจ้งเตือนกรณีลืมนำ URL มาใส่ (อันนี้เตือนแค่ครั้งเดียวถ้าย้ายโค้ดไปใหม่)
         if (SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE" || SCRIPT_URL.trim() === "") {
             showLoading(false);
-            alert("⚠️ แจ้งเตือนสำคัญ: คุณยังไม่ได้นำ Web App URL มาใส่ในไฟล์ HTML ครับ ระบบจะไม่สามารถทำงานหรือปิดปรับปรุงได้");
+            alert("⚠️ แจ้งเตือนสำคัญ: คุณยังไม่ได้นำ Web App URL มาใส่ในไฟล์ HTML ครับ");
             loginView.classList.remove('hidden');
             return;
         }
@@ -221,28 +221,28 @@
         })
         .then(res => {
             if(!res.ok) throw new Error("การตอบสนองเครือข่ายมีปัญหา");
-            return res.text(); // อ่านค่าเป็นข้อความก่อน เพื่อดักจับ Error HTML จาก Google
+            return res.text();
         })
         .then(text => {
             try {
                 const response = JSON.parse(text);
                 showLoading(false);
                 if (response.isOpen === false) {
-                    // ถ้าระบบปิด ให้แสดงหน้าปิดปรับปรุง
                     maintenanceView.classList.remove('hidden');
                 } else {
-                    // ถ้าระบบเปิด ให้แสดงหน้าล็อกอิน
                     loginView.classList.remove('hidden');
                 }
             } catch (e) {
+                // ข้ามป๊อปอัปแจ้งเตือนไปเลย ให้เปิดหน้าล็อกอินเงียบๆ
+                console.error("เช็คสถานะระบบล้มเหลว:", e.message);
                 showLoading(false);
-                alert("⚠️ ไม่สามารถเช็คสถานะได้ (คุณอาจจะลืมอัปเดตโค้ด Code.gs เป็น New version หรือสิทธิ์เข้าถึงผิดพลาด): " + e.message);
                 loginView.classList.remove('hidden');
             }
         })
         .catch(error => {
+            // ข้ามป๊อปอัปแจ้งเตือนไปเลย ให้เปิดหน้าล็อกอินเงียบๆ
+            console.error("เกิดข้อผิดพลาดในการเชื่อมต่อ:", error.message);
             showLoading(false);
-            alert("⚠️ เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์: " + error.message);
             loginView.classList.remove('hidden'); 
         });
     };
@@ -337,7 +337,7 @@
         })
         .catch(error => {
             showLoading(false);
-            alert("เกิดข้อผิดพลาดในการเชื่อมต่อ: " + error);
+            alert("เกิดข้อผิดพลาดในการเชื่อมต่อ (Failed to fetch): กรุณาตรวจสอบการตั้งค่า Deploy ใน Google Apps Script ว่า Execute as เป็น 'Me' หรือไม่");
         });
     }
 
@@ -385,7 +385,8 @@
         onLoginSuccess(data);
       })
       .catch(error => {
-        onLoginFailure(error);
+        showLoading(false);
+        showLoginError("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (Failed to fetch) กรุณาตรวจสอบการตั้งค่า Execute as ใน Apps Script");
       });
     });
 
@@ -444,3 +445,4 @@
   </script>
 </body>
 </html>
+```eof

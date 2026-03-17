@@ -47,52 +47,48 @@
       </div>
     </div>
 
-    <!-- Login View (หน้าล็อกอิน) -->
+    <!-- Login View -->
     <div id="loginView" class="hidden w-full max-w-md">
       <div class="bg-white rounded-xl shadow-2xl p-8">
         <div class="text-center mb-8">
-          <h1 class="text-3xl font-bold text-gray-800"><span class="opacity-25">📚</span> ระบบแก้ไขผลการเรียน</h1>
+          <h1 class="text-3xl font-bold text-gray-800">ระบบแก้ไขผลการเรียน</h1>
           <p class="text-xl text-gray-700 mt-1">0, ร และ มผ</p>
           <p class="text-gray-600 mt-2 font-semibold">โรงเรียนแม่จันวิทยาคม</p>
         </div>
         <form id="loginForm">
           <div class="mb-4">
             <label for="id_card" class="block text-gray-700 text-sm font-bold mb-2">เลขบัตรประจำตัวประชาชน</label>
-            <input type="text" id="id_card" name="id_card" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="ตัวอย่าง: 1234567890123" required>
+            <input type="text" id="id_card" name="id_card" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="กรอก 13 หลัก" required>
           </div>
           <div class="mb-6">
-            <label for="password" class="block text-gray-700 text-sm font-bold mb-2">รหัสผ่าน ปีเดือนวันเกิด</label>
-            <input type="password" id="password" name="password" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="ตัวอย่าง: 25000101" required>
+            <label for="password" class="block text-gray-700 text-sm font-bold mb-2">รหัสผ่าน</label>
+            <input type="password" id="password" name="password" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="กรอกรหัสผ่าน" required>
           </div>
-          <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-transform transform hover:scale-105 flex items-center justify-center space-x-2">
-            <span>🔑</span>
-            <span>เข้าสู่ระบบ</span>
+          <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-transform transform hover:scale-105">
+            เข้าสู่ระบบ
           </button>
         </form>
         <p id="loginError" class="text-red-500 text-center mt-4 font-semibold hidden"></p>
       </div>
     </div>
 
-    <!-- Form View (หน้าแบบฟอร์ม) -->
+    <!-- Form View -->
     <div id="formView" class="hidden w-full max-w-4xl">
       <div class="bg-white rounded-xl shadow-2xl p-8">
         <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-gray-800">📋 กรอกข้อมูลการแก้ไขผลการเรียน</h2>
-            <button id="logoutButton" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg text-sm flex items-center space-x-2">
-              <span>🚪</span>
-              <span>ออกจากระบบ</span>
-            </button>
+            <h2 class="text-2xl font-bold text-gray-800">กรอกข้อมูลการแก้ไขผลการเรียน</h2>
+            <button id="logoutButton" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg text-sm">ออกจากระบบ</button>
         </div>
         
         <form id="submissionForm" class="space-y-6">
           <!-- Teacher Info -->
           <fieldset class="border p-4 rounded-lg">
-            <legend class="px-2 font-semibold text-lg text-gray-700">1️⃣ ข้อมูลครูผู้สอน</legend>
+            <legend class="px-2 font-semibold text-lg text-gray-700">1. ข้อมูลครูผู้สอน</legend>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
               <input type="text" name="teacherFirstName" placeholder="ชื่อ" class="p-2 border rounded-md" required>
               <input type="text" name="teacherLastName" placeholder="นามสกุล" class="p-2 border rounded-md" required>
               <select name="teacherDept" class="p-2 border rounded-md" required>
-                <option value="" disabled selected>เลือกกลุ่มสาระฯ</option>
+                <option value="" disabled selected>เลือกกลุ่มสาระการเรียนรู้</option>
                 <option value="ภาษาไทย">ภาษาไทย</option>
                 <option value="คณิตศาสตร์">คณิตศาสตร์</option>
                 <option value="วิทยาศาสตร์และเทคโนโลยี">วิทยาศาสตร์และเทคโนโลยี</option>
@@ -108,7 +104,7 @@
 
           <!-- Course Info -->
           <fieldset class="border p-4 rounded-lg">
-            <legend class="px-2 font-semibold text-lg text-gray-700">2️⃣ ข้อมูลรายวิชา</legend>
+            <legend class="px-2 font-semibold text-lg text-gray-700">2. ข้อมูลรายวิชา</legend>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
               <input type="text" name="courseId" placeholder="รหัสวิชา" class="p-2 border rounded-md" required>
               <input type="text" name="courseName" placeholder="ชื่อรายวิชา" class="p-2 border rounded-md" required>
@@ -117,7 +113,7 @@
 
           <!-- Student Info -->
           <fieldset class="border p-4 rounded-lg">
-            <legend class="px-2 font-semibold text-lg text-gray-700">3️⃣ ข้อมูลนักเรียน</legend>
+            <legend class="px-2 font-semibold text-lg text-gray-700">3. ข้อมูลนักเรียน</legend>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-2">
               <input type="text" name="studentId" placeholder="เลขประจำตัว" class="p-2 border rounded-md" required>
               <input type="text" name="studentFirstName" placeholder="ชื่อ" class="p-2 border rounded-md" required>
@@ -131,21 +127,15 @@
 
           <!-- Grade Correction Info -->
           <fieldset class="border p-4 rounded-lg">
-            <legend class="px-2 font-semibold text-lg text-gray-700">4️⃣ แก้ไขผลการเรียนเป็น</legend>
+            <legend class="px-2 font-semibold text-lg text-gray-700">4. ข้อมูลการแก้ไข</legend>
             <div class="grid grid-cols-1 mt-2">
               <input type="text" name="newGrade" placeholder="ผลการเรียนที่แก้ไข" class="p-2 border rounded-md" required>
             </div>
           </fieldset>
 
           <div class="flex justify-end space-x-4 mt-6">
-            <button type="button" id="previewButton" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105 flex items-center space-x-2">
-              <span>👀</span>
-              <span>ดูตัวอย่าง</span>
-            </button>
-            <button type="button" id="submitButton" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105 flex items-center space-x-2">
-              <span>🚀</span>
-              <span>ส่งข้อมูล</span>
-            </button>
+            <button type="button" id="previewButton" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">ดูตัวอย่าง</button>
+            <button type="button" id="submitButton" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">ส่งข้อมูล</button>
           </div>
         </form>
       </div>
@@ -163,27 +153,15 @@
         </div>
     </div>
     
-    <!-- Success Modal -->
-    <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-lg shadow-xl p-8 max-w-sm w-full text-center">
-            <svg class="w-16 h-16 mx-auto text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <h3 id="successMessage" class="text-xl font-semibold mt-4 text-gray-800"></h3>
-            <button id="closeSuccessModalButton" class="mt-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-8 rounded-lg">ตกลง</button>
-        </div>
-    </div>
-
     <footer class="w-full text-center text-gray-700 text-sm p-4 mt-auto">
-      ✨ Designed by Chanitsara Jinachai | Developed with Google AI | © 2025 ✨
+      Designed by Chanitsara Jinachai | Developed with Google AI | © 2025
     </footer>
 
   </div>
 
   <script>
-    // =========================================================================
-    // 💡 นำ Web App URL ของคุณ (ที่ลงท้ายด้วย /exec) มาวางในเครื่องหมายคำพูดด้านล่างนี้
-    // =========================================================================
-    const SCRIPT_URL = "https://script.google.com/a/macros/mwk.ac.th/s/AKfycbw-ZAmjJHaYgaXCCR12cDc5xfUIhHS3xfoYVid6nvFNkaWPoySvoKHH5Iit_eXN-5E";
-
+    // **สำคัญ:** นำ Web App URL ที่ได้จากการ Deploy ใหม่ มาวางที่นี่
+    const SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
 
     // --- DOM Elements ---
     const loginView = document.getElementById('loginView');
@@ -200,49 +178,27 @@
     const previewContent = document.getElementById('previewContent');
     const editButton = document.getElementById('editButton');
     const confirmSubmitButton = document.getElementById('confirmSubmitButton');
-    const successModal = document.getElementById('successModal');
-    const successMessage = document.getElementById('successMessage');
-    const closeSuccessModalButton = document.getElementById('closeSuccessModalButton');
 
     // --- Initialization: เช็คสถานะระบบเมื่อโหลดหน้าเว็บ ---
     window.onload = function() {
-        if (SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE" || SCRIPT_URL.trim() === "") {
-            showLoading(false);
-            alert("⚠️ แจ้งเตือนสำคัญ: คุณยังไม่ได้นำ Web App URL มาใส่ในไฟล์ HTML ครับ");
-            loginView.classList.remove('hidden');
-            return;
-        }
-
         showLoading(true);
         fetch(SCRIPT_URL, {
-            redirect: "follow",
             method: 'POST',
-            body: JSON.stringify({ action: 'checkStatus' }),
-            headers: {
-                "Content-Type": "text/plain;charset=utf-8",
-            }
+            body: JSON.stringify({ action: 'checkStatus' })
         })
-        .then(res => {
-            if(!res.ok) throw new Error("การตอบสนองเครือข่ายมีปัญหา");
-            return res.text();
-        })
-        .then(text => {
-            try {
-                const response = JSON.parse(text);
-                showLoading(false);
-                if (response.isOpen === false) {
-                    maintenanceView.classList.remove('hidden');
-                } else {
-                    loginView.classList.remove('hidden');
-                }
-            } catch (e) {
-                console.error("เช็คสถานะระบบล้มเหลว:", e.message);
-                showLoading(false);
+        .then(res => res.json())
+        .then(response => {
+            showLoading(false);
+            if (response.isOpen) {
+                // ถ้าระบบเปิด ให้แสดงหน้าล็อกอิน
                 loginView.classList.remove('hidden');
+            } else {
+                // ถ้าระบบปิด ให้แสดงหน้าปิดปรับปรุง
+                maintenanceView.classList.remove('hidden');
             }
         })
         .catch(error => {
-            console.error("เกิดข้อผิดพลาดในการเชื่อมต่อ:", error.message);
+            // หากเกิดข้อผิดพลาด ให้เปิดหน้าล็อกอินเป็นค่าเริ่มต้น
             showLoading(false);
             loginView.classList.remove('hidden'); 
         });
@@ -322,19 +278,15 @@
         };
 
         fetch(SCRIPT_URL, {
-            redirect: "follow",
             method: 'POST',
-            body: JSON.stringify({ action: 'submit', formData: dataObject }),
-            headers: {
-                "Content-Type": "text/plain;charset=utf-8",
-            }
+            body: JSON.stringify({ action: 'submit', formData: dataObject })
         })
         .then(res => res.json())
         .then(result => {
             showLoading(false);
             if (result.success) {
-                successMessage.textContent = result.message;
-                successModal.classList.remove('hidden');
+                alert(result.message);
+                submissionForm.reset();
                 previewModal.classList.add('hidden');
             } else {
                 alert("เกิดข้อผิดพลาดในการส่งข้อมูล: " + result.message);
@@ -342,7 +294,7 @@
         })
         .catch(error => {
             showLoading(false);
-            alert("เกิดข้อผิดพลาดในการเชื่อมต่อ (Failed to fetch): กรุณาตรวจสอบการตั้งค่า Deploy ใน Google Apps Script ว่า Execute as เป็น 'Me' หรือไม่");
+            alert("เกิดข้อผิดพลาดในการเชื่อมต่อ: " + error);
         });
     }
 
@@ -382,20 +334,15 @@
       }
       showLoading(true);
       fetch(SCRIPT_URL, {
-        redirect: "follow",
         method: 'POST',
-        body: JSON.stringify({ action: 'login', id: id, password: password }),
-        headers: {
-            "Content-Type": "text/plain;charset=utf-8",
-        }
+        body: JSON.stringify({ action: 'login', id: id, password: password })
       })
       .then(res => res.json())
       .then(data => {
         onLoginSuccess(data);
       })
       .catch(error => {
-        showLoading(false);
-        showLoginError("เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (Failed to fetch) กรุณาตรวจสอบการตั้งค่า Execute as ใน Apps Script");
+        onLoginFailure(error);
       });
     });
 
@@ -439,19 +386,6 @@
     confirmSubmitButton.addEventListener('click', () => {
       handleFormSubmission();
     });
-
-    closeSuccessModalButton.addEventListener('click', () => {
-        successModal.classList.add('hidden');
-        // Reset form after user acknowledges success
-        const teacherFirstName = document.querySelector('input[name="teacherFirstName"]').value;
-        const teacherLastName = document.querySelector('input[name="teacherLastName"]').value;
-        const teacherDept = document.querySelector('select[name="teacherDept"]').value;
-        submissionForm.reset();
-        document.querySelector('input[name="teacherFirstName"]').value = teacherFirstName;
-        document.querySelector('input[name="teacherLastName"]').value = teacherLastName;
-        document.querySelector('select[name="teacherDept"]').value = teacherDept;
-    });
   </script>
 </body>
 </html>
-```

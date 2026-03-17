@@ -182,7 +182,7 @@
     // =========================================================================
     // 💡 นำ Web App URL ของคุณ (ที่ลงท้ายด้วย /exec) มาวางในเครื่องหมายคำพูดด้านล่างนี้
     // =========================================================================
-    const SCRIPT_URL = "https://script.google.com/a/macros/mwk.ac.th/s/AKfycbw-ZAmjJHaYgaXCCR12cDc5xfUIhHS3xfoYVid6nvFNkaWPoySvoKHH5Iit_eXN-5E";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw-ZAmjJHaYgaXCCR12cDc5xfUIhHS3xfoYVid6nvFNkaWPoySvoKHH5Iit_eXN-5E";
 
 
     // --- DOM Elements ---
@@ -206,7 +206,7 @@
 
     // --- Initialization: เช็คสถานะระบบเมื่อโหลดหน้าเว็บ ---
     window.onload = function() {
-        // แจ้งเตือนกรณีลืมนำ URL มาใส่ (อันนี้เตือนแค่ครั้งเดียวถ้าย้ายโค้ดไปใหม่)
+        // แจ้งเตือนกรณีลืมนำ URL มาใส่
         if (SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE" || SCRIPT_URL.trim() === "") {
             showLoading(false);
             alert("⚠️ แจ้งเตือนสำคัญ: คุณยังไม่ได้นำ Web App URL มาใส่ในไฟล์ HTML ครับ");
@@ -216,8 +216,12 @@
 
         showLoading(true);
         fetch(SCRIPT_URL, {
+            redirect: "follow", // ป้องกันปัญหาเรื่อง CORS Redirect
             method: 'POST',
-            body: JSON.stringify({ action: 'checkStatus' })
+            body: JSON.stringify({ action: 'checkStatus' }),
+            headers: {
+                "Content-Type": "text/plain;charset=utf-8",
+            }
         })
         .then(res => {
             if(!res.ok) throw new Error("การตอบสนองเครือข่ายมีปัญหา");
@@ -233,14 +237,12 @@
                     loginView.classList.remove('hidden');
                 }
             } catch (e) {
-                // ข้ามป๊อปอัปแจ้งเตือนไปเลย ให้เปิดหน้าล็อกอินเงียบๆ
                 console.error("เช็คสถานะระบบล้มเหลว:", e.message);
                 showLoading(false);
                 loginView.classList.remove('hidden');
             }
         })
         .catch(error => {
-            // ข้ามป๊อปอัปแจ้งเตือนไปเลย ให้เปิดหน้าล็อกอินเงียบๆ
             console.error("เกิดข้อผิดพลาดในการเชื่อมต่อ:", error.message);
             showLoading(false);
             loginView.classList.remove('hidden'); 
@@ -321,8 +323,12 @@
         };
 
         fetch(SCRIPT_URL, {
+            redirect: "follow",
             method: 'POST',
-            body: JSON.stringify({ action: 'submit', formData: dataObject })
+            body: JSON.stringify({ action: 'submit', formData: dataObject }),
+            headers: {
+                "Content-Type": "text/plain;charset=utf-8",
+            }
         })
         .then(res => res.json())
         .then(result => {
@@ -377,8 +383,12 @@
       }
       showLoading(true);
       fetch(SCRIPT_URL, {
+        redirect: "follow",
         method: 'POST',
-        body: JSON.stringify({ action: 'login', id: id, password: password })
+        body: JSON.stringify({ action: 'login', id: id, password: password }),
+        headers: {
+            "Content-Type": "text/plain;charset=utf-8",
+        }
       })
       .then(res => res.json())
       .then(data => {
@@ -445,4 +455,3 @@
   </script>
 </body>
 </html>
-```eof

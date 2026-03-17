@@ -206,7 +206,6 @@
 
     // --- Initialization: เช็คสถานะระบบเมื่อโหลดหน้าเว็บ ---
     window.onload = function() {
-        // แจ้งเตือนกรณีลืมนำ URL มาใส่
         if (SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE" || SCRIPT_URL.trim() === "") {
             showLoading(false);
             alert("⚠️ แจ้งเตือนสำคัญ: คุณยังไม่ได้นำ Web App URL มาใส่ในไฟล์ HTML ครับ");
@@ -216,7 +215,7 @@
 
         showLoading(true);
         fetch(SCRIPT_URL, {
-            redirect: "follow", // ป้องกันปัญหาเรื่อง CORS Redirect
+            redirect: "follow",
             method: 'POST',
             body: JSON.stringify({ action: 'checkStatus' }),
             headers: {
@@ -455,3 +454,4 @@
   </script>
 </body>
 </html>
+```
